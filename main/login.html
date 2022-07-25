@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Welcome to Login!!</h1>
+    <form id="form2">
+        <label class="labels">Username:</label>
+        <input type="text" id="username" placeholder="Type your email"/>
+        <br><br>
+        <label class="labels">Password:</label>
+        <input type="password" id="password" placeholder="Type your password"/>
+        <br><br>
+        <label class="labels">Select your role:</label>
+        <select type="dropdown" id="role" value="Select your role!">
+        <option id="admin" value="Admin"> Admin </option>
+        <option id="user" value="User"> User</option>
+        </select>
+        <br><br>
+        <input type="submit" id="login" value="Login"/>
+    </form>
+    <style>
+        body{
+            background-color: rgb(39, 38, 38);
+            text-align:center
+        }
+        #login{
+            border-radius: 8px;
+            padding:5px;
+            background-color:rgb(240, 232, 119);
+            font-weight:bold;
+        }
+        h1{
+        color: rgb(240, 232, 119);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .labels{
+            color:rgb(240, 232, 119);
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+    </style>
+    <script>
+        const form=document.getElementById('form2')
+        form.addEventListener('submit',login)
+        async function login(event){
+            event.preventDefault()
+            const email=document.getElementById('username').value
+            const password=document.getElementById('password').value
+            const role=document.getElementById('role').value
+            
+            const result=await fetch('/api/login',{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    email,
+                    password,
+                    role
+                })
+            }).then((res)=>res.json())
+            if(result.status==='OK'){
+                localStorage.setItem('token',result.data)
+                console.log('Token received',result.data);
+                alert("Login Success")
+            }else{
+                alert("Your role credientials wrong")
+            }
+            console.log(result)
+        }
+
+    </script>
+</body>
+</html>

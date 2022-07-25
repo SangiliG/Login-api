@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Password</title>
+</head>
+<body>
+<form id="form3">
+    <h1>Change password!!</h1>
+    <label class="labels">Type your new password:</label>
+    <input type="password" id="password" placeholder="Type your new password"/>
+    <br><br>
+    <input type="submit" id="changepwd" value="Submit Form"/>
+</form>
+<style>
+    body{
+        background-color: rgb(39, 38, 38);
+        text-align:center
+    }
+    #changepwd{
+        border-radius: 8px;
+        padding:5px;
+        background-color:rgb(112, 107, 252);
+        font-weight:bold;
+    }
+    h1{
+    color: rgb(112, 107, 252);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .labels{
+        color:rgb(112, 107, 252);
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    }
+</style>
+<script>
+    const form=document.getElementById('form3')
+    form.addEventListener('submit',changepwd)
+    async function changepwd(event){
+        event.preventDefault()
+        const password=document.getElementById('password').value
+        const result=await fetch('/api/changepwd',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                newpassword:password,
+                token:localStorage.getItem('token')
+            })
+        }).then((res)=>res.json())
+        if(result.status==='OK'){
+            localStorage.setItem('token',result.data)
+            console.log('Token received',result.data);
+            alert("Password changed Successfully!")
+        }else{
+            alert(result.error)
+        }
+        console.log(result)
+    }
+</script>
+</body>
+</html>
