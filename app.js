@@ -101,7 +101,7 @@ app.post('/api/login',async(req,res)=>{
                 if(role==Arole){
                 bcrypt.compare(password,Epassword).then(doMatch =>{
                     if(doMatch){
-                        const token=jwt.sign({id:email},JSONWTKEY,
+                        const token=jwt.sign({id:email,role:role},JSONWTKEY,
                             {
                             expiresIn: '10m'
                         })
